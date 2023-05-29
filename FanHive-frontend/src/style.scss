@@ -1,0 +1,41 @@
+$modes: (
+  light: (
+    textColor: black,
+    background: rgba(241, 241, 129, 1),
+    logo: black,
+    bgSoft: rgb(254, 254, 198),
+    textColorsoft: grey,
+    border: rgb(104, 104, 104),
+  ),
+  dark: (
+    textColor: rgba(241, 241, 129, 1),
+    background: rgb(33, 33, 33),
+    logo: rgba(241, 241, 129, 1),
+    bgSoft: rgb(55, 55, 55),
+    textColorsoft: lightgrey,
+    border: #444,
+  ),
+);
+
+@mixin themify($modes) {
+  @each $mode, $map in $modes {
+    .mode-#{$mode} & {
+      $mode-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($modes, $mode), "#{$key}");
+        $mode-map: map-merge(
+          $mode-map,
+          (
+            $key: $value,
+          )
+        ) !global;
+      }
+      @content;
+      $mode-map: null !global;
+    }
+  }
+}
+
+@function themed($key) {
+  @return map-get($mode-map, $key);
+}

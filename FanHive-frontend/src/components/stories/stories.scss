@@ -1,0 +1,55 @@
+@import "../../style.scss";
+
+.stories {
+  @include themify($modes) {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 0px 10px;
+    .story {
+      -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+      -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+      box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+      border-radius: 10px;
+      display: flex;
+      overflow: hidden;
+      gap: 20px;
+      background-color: themed("background");
+      padding: 10px;
+      img {
+        margin-top: 25px;
+        width: calc(1 / 4) * 512px;
+        height: calc(1 / 4) * 800px;
+        border-radius: 5%;
+        object-fit: cover;
+      }
+
+      .story-info {
+        color: themed("textColor");
+        margin-bottom: 10px;
+        .story-title {
+          font-size: 24px;
+        }
+
+        .story-tags {
+          display: flex;
+          flex-wrap: wrap;
+          margin-bottom: 10px;
+
+          .tag {
+            margin-right: 5px;
+          }
+        }
+
+        .story-synopsis {
+          text-align: justify;
+        }
+
+        .story-stats {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+}

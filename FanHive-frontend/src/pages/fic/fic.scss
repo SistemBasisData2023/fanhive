@@ -1,0 +1,97 @@
+@import "../../style.scss";
+
+.fic-details {
+  @include themify($modes) {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 0px 10px;
+    display: flex;
+    overflow: hidden;
+    gap: 20px;
+    background-color: themed("background");
+    padding: 10px;
+    color: themed("textColor");
+    .top-details {
+      display: flex;
+      gap: 10px;
+      .fic-cover {
+        margin-top: 25px;
+        width: calc(1 / 4) * 512px;
+        height: calc(1 / 4) * 800px;
+        border-radius: 5%;
+        object-fit: cover;
+      }
+
+      .fic-info {
+        color: themed("textColor");
+        margin-bottom: 10px;
+        .fic-edit-follow {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          svg {
+            cursor: pointer;
+            font-size: larger;
+          }
+          .fic-title {
+            font-size: 24px;
+          }
+        }
+
+        .fic-tags {
+          display: flex;
+          flex-wrap: wrap;
+          margin-bottom: 10px;
+
+          .tag {
+            margin-right: 5px;
+          }
+        }
+
+        .fic-synopsis {
+          text-align: justify;
+        }
+
+        .fic-stats {
+          display: flex;
+          width: 100%;
+          gap: 30px;
+        }
+      }
+    }
+    .chapter-picker {
+      align-items: center;
+      button {
+        border: none;
+        background-color: themed("textColor");
+        color: themed("background");
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 5px;
+        font-weight: bold;
+        margin-right: 5px;
+      }
+      .add-chapter-icon {
+        border: none;
+        color: themed("textColor");
+        cursor: pointer;
+        margin-top: 5px;
+        margin-right: 5px;
+      }
+    }
+    .chapter-content {
+      .title-edit {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        svg {
+          cursor: pointer;
+          font-size: medium;
+        }
+      }
+      text-align: justify;
+    }
+  }
+}

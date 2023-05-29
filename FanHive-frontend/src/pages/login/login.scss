@@ -1,0 +1,96 @@
+.login {
+  height: 100vh;
+  background-color: rgba(241, 241, 129, 0.897);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .card {
+    width: 70%;
+    display: flex;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    min-height: 500px;
+    overflow: hidden;
+
+    .left {
+      flex: 1;
+      background: linear-gradient(rgba(241, 241, 129, 0.3), black),
+        url("https://github.com/styxnanda/styxnanda/assets/109936851/13997156-96b6-458f-a7b9-11f92eb48cae")
+          center;
+      background-size: 100%;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      color: white;
+
+      position: relative;
+      overflow: hidden;
+      transition: background-size 0.7s ease;
+
+      &:hover {
+        background-size: 115%;
+      }
+
+      h1 {
+        font-size: 50px;
+        line-height: 50px;
+      }
+      p {
+        margin-bottom: 20px;
+      }
+      span {
+        margin-top: 8px;
+        font-size: 14px;
+      }
+      button {
+        width: 40%;
+        padding: 15px;
+        border: none;
+        border-radius: 5px;
+        background-color: rgba(86, 86, 86, 0.422);
+        color: rgba(241, 241, 129, 0.897);
+        font-weight: bold;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        cursor: pointer;
+      }
+    }
+
+    .right {
+      flex: 1;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+      justify-content: center;
+
+      h1 {
+        color: rgb(99, 99, 99);
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        input {
+          border: none;
+          border-bottom: 1px solid rgb(203, 203, 203);
+          padding: 20px 10px;
+        }
+        button {
+          border: none;
+          border-radius: 5px;
+          width: 60%;
+          padding: 10px;
+          background-color: rgba(241, 241, 129, 1);
+          font-weight: bold;
+          font-family: "Franklin Gothic Medium", "Arial Narrow", Arial,
+            sans-serif;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
