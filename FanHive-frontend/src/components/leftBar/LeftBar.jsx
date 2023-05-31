@@ -6,14 +6,14 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/authenticationContext";
 
 const LeftBar = () => {
-  const { loggedUser } = useContext(AuthContext);
+  const { loggedUser, logout } = useContext(AuthContext);
 
   return (
     <div className="leftBar">
       <div className="container">
         <div className="menu">
           <div className="user">
-            <img src={loggedUser.profilePic} alt="profpic" />
+            <img src={loggedUser.profile_pic} alt="profpic" />
             <span>{loggedUser.username}</span>
           </div>
           <div className="item">
@@ -30,7 +30,7 @@ const LeftBar = () => {
           <span>Preferences</span>
           <div className="item">
             <img src={Logout} alt="Logout" />
-            <span>Logout</span>
+            <span onClick={logout}>Logout</span>
           </div>
         </div>
       </div>

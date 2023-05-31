@@ -16,6 +16,7 @@ const Navbar = () => {
   const { toggle, darkMode } = useContext(DarkModeContext);
   const { loggedUser } = useContext(AuthContext);
 
+  console.log(loggedUser);
   return (
     <div className="navbar">
       <div className="left">
@@ -36,15 +37,15 @@ const Navbar = () => {
       </div>
       <div className="right">
         <Link to="/write" style={{ textDecoration: "none" }}>
-        <div className="writeFic">
-          <CreateRoundedIcon />
-          <span>Write</span>
-        </div>
+          <div className="writeFic">
+            <CreateRoundedIcon />
+            <span>Write</span>
+          </div>
         </Link>
         <Person4RoundedIcon />
         <NotificationsRoundedIcon />
         <div className="user">
-          <img src={loggedUser.profilePic} alt="profpic" />
+          <img src={loggedUser.profile_pic} alt="profpic" />
           <span>{loggedUser.username}</span>
         </div>
       </div>

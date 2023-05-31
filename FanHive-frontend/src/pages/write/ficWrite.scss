@@ -1,0 +1,120 @@
+@import "../../style.scss";
+
+.writing {
+  @include themify($modes) {
+    background-color: themed("background");
+    display: flex;
+    gap: 20px;
+    padding: 20px 10px;
+
+    h1 {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    .content {
+      flex: 5;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      input {
+        padding: 10px;
+        border: 1px solid themed("textColor");
+        background-color: themed("background");
+        color: themed("textColor");
+        outline: none;
+      }
+
+      .editorContainer {
+        height: 500px;
+        overflow: scroll;
+        overflow-x: hidden;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        border: 1px solid themed("textColor");
+
+        .ql-toolbar .ql-stroke {
+          fill: none;
+          stroke: themed("textColor");
+        }
+
+        .ql-toolbar .ql-fill {
+          fill: themed("textColor");
+          stroke: none;
+        }
+
+        .ql-toolbar .ql-picker {
+          color: themed("textColor");
+          .ql-picker-options {
+            background-color: themed("background");
+          }
+        }
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        .editor {
+          height: 100%;
+          border: none;
+          color: themed("textColor");
+        }
+      }
+    }
+
+    .menu {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .item {
+        color: themed("textColor");
+        border: 1px solid themed("textColor");
+        padding: 10px;
+        //align-items: start;
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        h1 {
+          font-size: 20px;
+        }
+
+        .cover-file {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+
+        .buttons {
+          margin-top: 10px;
+          margin-left: auto;
+          button {
+            border: 1px solid themed("textColor");
+            padding: 10px 10px;
+            cursor: pointer;
+            background-color: transparent;
+            color: themed("textColor");
+            transition: all 0.1s ease;
+            &:hover {
+              background-color: themed("textColor");
+              color: themed("background");
+            }
+          }
+        }
+
+        .check {
+          accent-color: themed("textColor");
+        }
+
+        .status {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+      }
+    }
+  }
+}

@@ -4,6 +4,7 @@
   @include themify($modes) {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
     gap: 20px;
     padding: 0 0px 10px;
     .story {
@@ -47,7 +48,8 @@
 
         .story-stats {
           display: flex;
-          justify-content: space-between;
+          //justify-content: space-between;
+          gap: 20px;
         }
       }
     }

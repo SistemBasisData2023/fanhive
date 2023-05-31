@@ -17,11 +17,12 @@ import { AuthContext } from "./context/authenticationContext";
 import Fic from "./pages/fic/Fic";
 import FicWrite from "./pages/write/FicWrite";
 import ChapterWrite from "./pages/write/ChapterWrite";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 function App() {
   const { loggedUser } = useContext(AuthContext);
-
   const { darkMode } = useContext(DarkModeContext);
+  const queryClient = new QueryClient();
 
   console.log(darkMode);
 
@@ -34,15 +35,17 @@ function App() {
 
   const Layout = () => {
     return (
-      <div className={`mode-${darkMode ? "dark" : "light"}`}>
-        <Navbar />
-        <div style={{ display: "flex" }}>
-          <LeftBar />
-          <div style={{ flex: 6 }}>
-            <Outlet />
+      <QueryClientProvider client={queryClient}>
+        <div className={`mode-${darkMode ? "dark" : "light"}`}>
+          <Navbar />
+          <div style={{ display: "flex" }}>
+            <LeftBar />
+            <div style={{ flex: 6 }}>
+              <Outlet />
+            </div>
           </div>
         </div>
-      </div>
+      </QueryClientProvider>
     );
   };
 
@@ -68,11 +71,11 @@ function App() {
           element: <Fic />,
         },
         {
-          path: "/write/:id",
+          path: "/write/",
           element: <FicWrite />,
         },
         {
-          path: "/write/:id/ch/:cid",
+          path: "/write/:id/ch/",
           element: <ChapterWrite />,
         },
       ],

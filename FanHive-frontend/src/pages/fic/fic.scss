@@ -11,6 +11,7 @@
     gap: 20px;
     background-color: themed("background");
     padding: 10px;
+    min-height: 100vh;
     color: themed("textColor");
     .top-details {
       display: flex;
