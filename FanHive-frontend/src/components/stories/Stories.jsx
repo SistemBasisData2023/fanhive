@@ -1,6 +1,6 @@
 import "./stories.scss";
 import { formatDate } from "../../utilsDate";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { Link } from "react-router-dom";
 
@@ -16,13 +16,14 @@ const Stories = () => {
   // show error message if there is an error
   if (error) return <div>Error: {error.message} </div>;
 
+  console.log(data);
   return (
     <div className="stories">
       {data.map((story) => (
         <div className="story" key={story.id}>
           <img
             className="story-cover"
-            src={story.coverImage}
+            src={`../uploads/${story.coverImage}`}
             alt={story.title}
           />
           <div className="story-info">
@@ -37,6 +38,7 @@ const Stories = () => {
                 {story.tags.map((tag) => (
                   <span className="tag" key={tag}>
                     {tag}
+                    {story.tags.indexOf(tag) !== story.tags.length - 1 && ", "}
                   </span>
                 ))}
               </div>

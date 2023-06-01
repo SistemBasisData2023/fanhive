@@ -1,3 +1,4 @@
 /FanHive-frontend/node_modules
+/FanHive-frontend/public/uploads
 /FanHive-backend/node_modules
 /FanHive-backend/.env

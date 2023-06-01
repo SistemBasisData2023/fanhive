@@ -17,7 +17,7 @@ import { AuthContext } from "./context/authenticationContext";
 import Fic from "./pages/fic/Fic";
 import FicWrite from "./pages/write/FicWrite";
 import ChapterWrite from "./pages/write/ChapterWrite";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import FollowHome from "./pages/followHome/FollowHome";
 
 function App() {

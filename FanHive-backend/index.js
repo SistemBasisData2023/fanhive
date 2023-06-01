@@ -8,11 +8,12 @@ import bp from "body-parser";
 import cors from "cors";
 import pg from "pg";
 import cookieParser from "cookie-parser";
+import multer from "multer";
 import dotenv from "dotenv";
 
 const { Client } = pg;
 dotenv.config();
-const {PGHOST, PGUSER, PGDATABASE, PGPASSWORD} = process.env;
+const { PGHOST, PGUSER, PGDATABASE, PGPASSWORD } = process.env;
 
 export const db = new Client({
   // Credential for establishing connection
@@ -47,6 +48,21 @@ app.use(
 );
 app.use(cookieParser());
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "../FanHive-frontend/public/uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+app.post("/upload", upload.single("file"), (req, res) => {
+  const file = req.file;
+  res.status(200).json(file.filename);
+});
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/fic", storyRoutes);

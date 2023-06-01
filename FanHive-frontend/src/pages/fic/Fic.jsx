@@ -1,13 +1,17 @@
 import "./fic.scss";
 import { formatDate } from "../../utilsDate";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
-import { useQuery } from "react-query";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { AuthContext } from "../../context/authenticationContext";
 
 const Fic = () => {
+  const { loggedUser } = useContext(AuthContext);
   const { id } = useParams();
   const [selectedChapter, setSelectedChapter] = useState(null);
   const { isLoading, error, data } = useQuery(["story"], () =>
@@ -30,16 +34,26 @@ const Fic = () => {
     setSelectedChapter(chapter);
   };
 
-  console.log(data);
-
   return (
     <div className="fic-details">
       <div className="top-details">
-        <img className="fic-cover" src={data.coverimage} alt={data.title} />
+        <img
+          className="fic-cover"
+          src={`../public/uploads/${data.coverimage}`}
+          alt={data.title}
+        />
         <div className="fic-info">
           <div className="fic-edit-follow">
             <h2 className="fic-title">{data.title}</h2>
-            <SettingsRoundedIcon />
+            <FavoriteRoundedIcon />
+            {loggedUser.username === data.author && (
+              <div className="edit">
+                <Link to={`/write?edit=2`} state={data}>
+                  <SettingsRoundedIcon />
+                </Link>
+                <DeleteRoundedIcon />
+              </div>
+            )}
           </div>
           <p className="fic-fandom">{data.fandom}</p>
           <p className="fic-author">by {data.author}</p>

@@ -1,6 +1,6 @@
 import "./followedStories.scss";
 import { formatDate } from "../../utilsDate";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { useParams } from "react-router-dom";
 
