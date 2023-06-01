@@ -1,12 +1,13 @@
-import "./stories.scss";
+import "./followedStories.scss";
 import { formatDate } from "../../utilsDate";
 import { useQuery } from "react-query";
 import { makeRequest } from "../../axios";
-import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-const Stories = () => {
-  const { isLoading, error, data } = useQuery(["stories"], () =>
-    makeRequest.get("/fic/").then((res) => {
+const FollowedStories = () => {
+  const {id} = useParams();
+  const { isLoading, error, data } = useQuery(["followedStories"], () =>
+    makeRequest.get(`/fic/followed/${id}`).then((res) => {
       return res.data;
     })
   );
@@ -17,32 +18,30 @@ const Stories = () => {
   if (error) return <div>Error: {error.message} </div>;
 
   return (
-    <div className="stories">
+    <div className="follow-stories">
       {data.map((story) => (
-        <div className="story" key={story.id}>
+        <div className="follow-story" key={story.id}>
           <img
-            className="story-cover"
+            className="follow-story-cover"
             src={story.coverImage}
             alt={story.title}
           />
-          <div className="story-info">
-            <Link to={`/fic/${story.id}`} style={{ textDecoration: "none" }}>
-              <h2 className="story-title">{story.title}</h2>
-            </Link>
-            <p className="story-fandom">{story.fandom}</p>
-            <p className="story-author">by {story.author}</p>
-            <p className="story-status">{story.status}</p>
+          <div className="follow-story-info">
+            <h2 className="follow-story-title">{story.title}</h2>
+            <p className="follow-story-fandom">{story.fandom}</p>
+            <p className="follow-story-author">by {story.author}</p>
+            <p className="follow-story-status">{story.status}</p>
             {story.tags.length > 0 && (
-              <div className="story-tags">
+              <div className="follow-story-tags">
                 {story.tags.map((tag) => (
-                  <span className="tag" key={tag}>
+                  <span className="follow-tag" key={tag}>
                     {tag}
                   </span>
                 ))}
               </div>
             )}
-            <p className="story-synopsis">{story.synopsis}</p>
-            <div className="story-stats">
+            <p className="follow-story-synopsis">{story.synopsis}</p>
+            <div className="follow-story-stats">
               <span>{story.chapterCount} Chapters</span>
               <span>Published on {formatDate(story.datePublished)}</span>
               <span>
@@ -54,7 +53,7 @@ const Stories = () => {
               <span>
                 {story.wordCount
                   ? story.wordCount.toLocaleString("en-US")
-                  : "0 "}{" "}
+                  : "0 "}
                 Words
               </span>
             </div>
@@ -65,4 +64,4 @@ const Stories = () => {
   );
 };
 
-export default Stories;
+export default FollowedStories;

@@ -4,6 +4,7 @@ import Following from "../../assets/following.png";
 import Logout from "../../assets/logout-icon.png";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authenticationContext";
+import { Link } from "react-router-dom";
 
 const LeftBar = () => {
   const { loggedUser, logout } = useContext(AuthContext);
@@ -22,7 +23,9 @@ const LeftBar = () => {
           </div>
           <div className="item">
             <img src={Following} alt="Following" />
-            <span>Following</span>
+            <Link to={`/followed/${loggedUser.userid}`}>
+              <span>Following</span>
+            </Link>
           </div>
         </div>
         <hr />

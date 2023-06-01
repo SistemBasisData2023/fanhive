@@ -18,6 +18,7 @@ import Fic from "./pages/fic/Fic";
 import FicWrite from "./pages/write/FicWrite";
 import ChapterWrite from "./pages/write/ChapterWrite";
 import { QueryClient, QueryClientProvider } from "react-query";
+import FollowHome from "./pages/followHome/FollowHome";
 
 function App() {
   const { loggedUser } = useContext(AuthContext);
@@ -77,6 +78,10 @@ function App() {
         {
           path: "/write/:id/ch/",
           element: <ChapterWrite />,
+        },
+        {
+          path: "/followed/:id",
+          element: <FollowHome />,
         },
       ],
     },

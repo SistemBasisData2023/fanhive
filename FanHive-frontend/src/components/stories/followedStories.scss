@@ -1,13 +1,13 @@
 @import "../../style.scss";
 
-.stories {
+.follow-stories {
   @include themify($modes) {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     gap: 20px;
     padding: 0 0px 10px;
-    .story {
+    .follow-story {
       -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
       -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
       box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
@@ -25,30 +25,28 @@
         object-fit: cover;
       }
 
-      .story-info {
+      .follow-story-info {
         color: themed("textColor");
         margin-bottom: 10px;
-        .story-title {
+        .follow-story-title {
           font-size: 24px;
-          color: themed("textColor");
-          text-decoration: none;
         }
 
-        .story-tags {
+        .follow-story-tags {
           display: flex;
           flex-wrap: wrap;
           margin-bottom: 10px;
 
-          .tag {
+          .follow-tag {
             margin-right: 5px;
           }
         }
 
-        .story-synopsis {
+        .follow-story-synopsis {
           text-align: justify;
         }
 
-        .story-stats {
+        .follow-story-stats {
           display: flex;
           //justify-content: space-between;
           gap: 20px;

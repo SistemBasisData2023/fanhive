@@ -8,15 +8,17 @@ import bp from "body-parser";
 import cors from "cors";
 import pg from "pg";
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
 const { Client } = pg;
+dotenv.config();
+const {PGHOST, PGUSER, PGDATABASE, PGPASSWORD} = process.env;
 
 export const db = new Client({
-  //Tambahkan parameter yang sesuai untuk melakukan koneksi dengan database
-  user: "satyaananda65",
-  host: "ep-ancient-feather-555124.ap-southeast-1.aws.neon.tech",
-  database: "db_fanhive",
-  password: "hZe3ab0CGUFr",
+  // Credential for establishing connection
+  host: PGHOST,
+  database: PGDATABASE,
+  password: PGPASSWORD,
   port: 5432,
   ssl: {
     rejectUnauthorized: false,

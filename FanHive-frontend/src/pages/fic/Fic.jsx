@@ -75,7 +75,7 @@ const Fic = () => {
               key={chapter.id}
               onClick={() => handleChapterSelect(chapter)}
               //className={
-                //selectedChapter.id === chapter.number ? "selected" : ""
+              //selectedChapter.id === chapter.number ? "selected" : ""
               //}
             >
               Chapter {chapter.number}
