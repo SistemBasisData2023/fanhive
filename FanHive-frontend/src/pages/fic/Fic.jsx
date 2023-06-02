@@ -34,12 +34,17 @@ const Fic = () => {
     setSelectedChapter(chapter);
   };
 
+  const getText = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent;
+  }
+
   return (
     <div className="fic-details">
       <div className="top-details">
         <img
           className="fic-cover"
-          src={`../public/uploads/${data.coverimage}`}
+          src={`../uploads/${data.coverimage}`}
           alt={data.title}
         />
         <div className="fic-info">
@@ -63,15 +68,21 @@ const Fic = () => {
               {data.tags.map((tag) => (
                 <span className="tag" key={tag}>
                   {tag}
+                  {data.tags.indexOf(tag) !== data.tags.length - 1 && ", "}
                 </span>
               ))}
             </div>
           )}
-          <p className="fic-synopsis">{data.synopsis}</p>
+          <p className="fic-synopsis">{getText(data.synopsis)}</p>
           <div className="fic-stats">
             <span>{data.chaptercount} Chapters</span>
             <span>Published on {formatDate(data.datepublished)}</span>
-            <span>Last Updated on {formatDate(data.dateupdated)}</span>
+            <span>
+              Last Updated on{" "}
+              {data.dateUpdated
+                ? formatDate(data.dateupdated)
+                : formatDate(data.datepublished)}
+            </span>
             <span>
               {data &&
                 data.wordCount !== undefined &&
@@ -95,13 +106,19 @@ const Fic = () => {
               Chapter {chapter.number}
             </button>
           ))}
-        <AddCircleRoundedIcon className="add-chapter-icon" />
+        {loggedUser.username === data.author && (
+          <Link to={`/write/${data.id}/ch`}>
+            <AddCircleRoundedIcon className="add-chapter-icon" />
+          </Link>
+        )}
       </div>
       {selectedChapter && (
         <div className="chapter-content">
           <div className="title-edit">
             <h2>{selectedChapter.title}</h2>
-            <SettingsRoundedIcon />
+            <Link to={`/write/${data.id}/ch?edit=2`} state={selectedChapter}>
+              <SettingsRoundedIcon />
+            </Link>
           </div>
           <p>{selectedChapter.content}</p>
         </div>

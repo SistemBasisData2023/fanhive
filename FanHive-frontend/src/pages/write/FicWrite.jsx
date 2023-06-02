@@ -9,8 +9,8 @@ const FicWrite = () => {
   const state = useLocation().state;
   const [value, setValue] = useState(state?.synopsis || "");
   const [title, setTitle] = useState(state?.title || "");
-  const [fandom, setFandom] = useState(state?.fandom || "");
-  const [tags, setTags] = useState(state?.tags || "");
+  const [fandom, setFandom] = useState(state?.fandom.join(', ') || "");
+  const [tags, setTags] = useState(state?.tags.join(', ') || "");
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState(state?.status || false);
 

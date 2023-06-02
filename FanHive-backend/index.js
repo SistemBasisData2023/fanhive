@@ -61,7 +61,11 @@ const upload = multer({ storage });
 
 app.post("/upload", upload.single("file"), (req, res) => {
   const file = req.file;
-  res.status(200).json(file.filename);
+  if (!file) {
+    res.status(200).json({ message: "No file uploaded" });
+  } else {
+    res.status(200).json(file.filename);
+  }
 });
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);

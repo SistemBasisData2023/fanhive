@@ -16,7 +16,11 @@ const Stories = () => {
   // show error message if there is an error
   if (error) return <div>Error: {error.message} </div>;
 
-  console.log(data);
+  const getText = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent;
+  }
+
   return (
     <div className="stories">
       {data.map((story) => (
@@ -43,7 +47,7 @@ const Stories = () => {
                 ))}
               </div>
             )}
-            <p className="story-synopsis">{story.synopsis}</p>
+            <p className="story-synopsis">{getText(story.synopsis)}</p>
             <div className="story-stats">
               <span>{story.chapterCount} Chapters</span>
               <span>Published on {formatDate(story.datePublished)}</span>

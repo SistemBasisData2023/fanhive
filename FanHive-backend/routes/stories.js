@@ -1,5 +1,15 @@
 import express from "express";
-import { addStory, getStories, getStory, deleteStory, updateStory, getFollowedStories, getHeartedStories } from "../controllers/story.js";
+import {
+  addStory,
+  getStories,
+  getStory,
+  deleteStory,
+  updateStory,
+  getFollowedStories,
+  getHeartedStories,
+  addChapter,
+  updateChapter,
+} from "../controllers/story.js";
 
 const router = express.Router();
 
@@ -10,5 +20,8 @@ router.get("/heart/:id", getHeartedStories);
 router.post("/", addStory);
 router.delete("/:id", deleteStory);
 router.put("/:id", updateStory);
+
+router.post("/:id/ch", addChapter);
+router.put("/:id/ch/:cid", updateChapter);
 
 export default router;

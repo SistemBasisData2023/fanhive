@@ -23,7 +23,7 @@ const FollowedStories = () => {
         <div className="follow-story" key={story.id}>
           <img
             className="follow-story-cover"
-            src={story.coverImage}
+            src={`../uploads/${story.coverImage}`}
             alt={story.title}
           />
           <div className="follow-story-info">

@@ -43,7 +43,7 @@ export const getStory = (req, res) => {
     Stories.story_cover AS coverImage, 
     Stories.title, 
     Users.username AS author,
-    Stories.is_finished AS status,
+    CASE WHEN Stories.is_finished THEN 'Completed' ELSE 'Ongoing' END as status,
     Stories.story_desc AS synopsis,
     Stories.date_posted AS datePublished,
     (
@@ -65,7 +65,8 @@ export const getStory = (req, res) => {
 
   const chapterQ = `SELECT chapterID AS id, chapter_number AS number, chapter_title AS title, chapter_content AS content
     FROM Chapters
-    WHERE storyID = $1;`;
+    WHERE storyID = $1
+    ORDER BY chapter_number ASC;`;
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.json(err);
@@ -208,7 +209,7 @@ export const addStory = (req, res) => {
           };
 
           Promise.all([insertTags(), insertFandoms()])
-            .then(() => res.status(201).json({ message: "Story added!" }))
+            .then(() => res.status(201).json({ message: "Fic added!" }))
             .catch((err) => res.status(500).json({ message: err.message }));
         }
       }
@@ -218,4 +219,136 @@ export const addStory = (req, res) => {
 
 export const deleteStory = (req, res) => {};
 
-export const updateStory = (req, res) => {};
+export const updateStory = (req, res) => {
+  const token = req.cookies.access_token;
+  if (!token) return res.status(400).json("Not logged in!");
+
+  jwt.verify(token, "secret", (err, userInfo) => {
+    if (err) return res.status(403).json("Access token invalid!");
+
+    const storyid_p = req.params.id;
+    let { title, story_desc, is_finished, fandom, tags, story_cover } =
+      req.body;
+    let params;
+    let qStory;
+
+    if (story_cover) {
+      qStory = `UPDATE Stories SET title=$1, story_desc=$2, story_cover=$3, is_finished=$4 WHERE storyID=$5 RETURNING *;`;
+      params = [title, story_desc, story_cover, is_finished, storyid_p];
+    } else {
+      qStory = `UPDATE Stories SET title=$1, story_desc=$2, is_finished=$3 WHERE storyID=$4 RETURNING *;`;
+      params = [title, story_desc, is_finished, storyid_p];
+    }
+
+    db.query(qStory, params, (err, result) => {
+      if (err) {
+        console.log(err.stack);
+        return res.status(500).json({ message: err.stack });
+      } else {
+        const storyID = result.rows[0].storyid;
+        const tagsList = tags.split(",");
+        const fandomsList = fandom.split(",");
+
+        const deleteOldTags = async () => {
+          const qDeleteOldTags = `DELETE FROM story_tags WHERE storyid = $1;`;
+          await db.query(qDeleteOldTags, [storyID]);
+        };
+
+        const deleteOldFandoms = async () => {
+          const qDeleteOldFandoms = `DELETE FROM story_fandoms WHERE storyid = $1;`;
+          await db.query(qDeleteOldFandoms, [storyID]);
+        };
+
+        const insertTags = async () => {
+          for (let tag of tagsList) {
+            const qTag = `INSERT INTO tags (tag_name) VALUES ($1) ON CONFLICT (tag_name) DO UPDATE SET tag_name=EXCLUDED.tag_name RETURNING tagid;`;
+            let resultTag = await db.query(qTag, [tag.trim()]);
+            const tagID = resultTag.rows[0].tagid;
+
+            const qStoryTag = `INSERT INTO story_tags (storyid, tagid) VALUES ($1, $2);`;
+            await db.query(qStoryTag, [storyID, tagID]);
+          }
+        };
+
+        const insertFandoms = async () => {
+          for (let fandom of fandomsList) {
+            const qFandom = `INSERT INTO fandoms (fandom_name) VALUES ($1) ON CONFLICT (fandom_name) DO UPDATE SET fandom_name=EXCLUDED.fandom_name RETURNING fandomid;`;
+            let resultFandom = await db.query(qFandom, [fandom.trim()]);
+            const fandomID = resultFandom.rows[0].fandomid;
+
+            const qStoryFandom = `INSERT INTO story_fandoms (storyid, fandomid) VALUES ($1, $2);`;
+            await db.query(qStoryFandom, [storyID, fandomID]);
+          }
+        };
+
+        Promise.all([
+          deleteOldFandoms(),
+          deleteOldTags(),
+          insertTags(),
+          insertFandoms(),
+        ])
+          .then(() => res.status(201).json({ message: "Fic updated!" }))
+          .catch((err) => res.status(500).json({ message: err.message }));
+      }
+    });
+  });
+};
+
+export const addChapter = (req, res) => {
+  const token = req.cookies.access_token;
+  if (!token) return res.status(400).json("Not logged in!");
+
+  jwt.verify(token, "secret", (err, userInfo) => {
+    if (err) return res.status(403).json("Access token invalid!");
+
+    const storyID = req.params.id;
+    const { chapter_number, chapter_title, chapter_content } = req.body;
+
+    const q = `INSERT INTO Chapters (storyID, chapter_number, chapter_title, chapter_content) 
+    VALUES ($1, $2, $3, $4) RETURNING *;`;
+
+    db.query(
+      q,
+      [storyID, chapter_number, chapter_title, chapter_content],
+      (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: err.stack });
+        } else {
+          res
+            .status(200)
+            .json({ message: "Chapter added!", chapter: result.rows[0] });
+        }
+      }
+    );
+  });
+};
+
+export const updateChapter = (req, res) => {
+  const token = req.cookies.access_token;
+  if (!token) return res.status(400).json("Not logged in!");
+
+  jwt.verify(token, "secret", (err, userInfo) => {
+    if (err) return res.status(403).json("Access token invalid!");
+
+    const storyID = req.params.id;
+    const chapterID = req.params.cid; 
+    const { chapter_number, chapter_title, chapter_content } = req.body;
+
+    const q = `UPDATE Chapters SET chapter_number = $1, chapter_title = $2, chapter_content = $3 
+    WHERE storyID = $4 AND chapterID = $5 RETURNING *;`;
+
+    db.query(
+      q,
+      [chapter_number, chapter_title, chapter_content, storyID, chapterID],
+      (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: err.stack });
+        } else {
+          res
+            .status(200)
+            .json({ message: "Chapter updated!", chapter: result.rows[0] });
+        }
+      }
+    );
+  });
+};
