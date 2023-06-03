@@ -51,9 +51,14 @@
           img {
             width: 30px;
           }
+          a:link{
+            text-decoration: none;
+          }
           span {
             font-size: 14px;
             cursor: pointer;
+            text-decoration: none;
+            color: themed("textColor");
           }
         }
       }

@@ -22,7 +22,8 @@ export const getStories = (req, res) => {
     LEFT JOIN Fandoms f ON sf.fandomID = f.fandomID
     LEFT JOIN Story_Tags st ON s.storyID = st.storyID
     LEFT JOIN Tags t ON st.tagID = t.tagID
-    GROUP BY s.storyID, u.username;`;
+    GROUP BY s.storyID, u.username
+    ORDER BY COALESCE(MAX(c.date_posted), s.date_posted) DESC;`;
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).json({ message: err.message });
@@ -110,7 +111,8 @@ export const getFollowedStories = (req, res) => {
     LEFT JOIN Story_Tags st ON s.storyID = st.storyID
     LEFT JOIN Tags t ON st.tagID = t.tagID
     WHERE s.authorID IN (SELECT followedID FROM Followers WHERE followerID = $1)
-    GROUP BY s.storyID, u.username;`;
+    GROUP BY s.storyID, u.username
+    ORDER BY COALESCE(MAX(c.date_posted), s.date_posted) DESC;`;
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json({ message: err.message });
@@ -148,7 +150,8 @@ export const getHeartedStories = (req, res) => {
     LEFT JOIN Tags t ON st.tagID = t.tagID
     INNER JOIN Heart h ON s.storyID = h.storyID
     WHERE h.userID = $1
-    GROUP BY s.storyID, u.username;`;
+    GROUP BY s.storyID, u.username
+    ORDER BY COALESCE(MAX(c.date_posted), s.date_posted) DESC;`;
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json({ message: err.message });
@@ -331,7 +334,7 @@ export const updateChapter = (req, res) => {
     if (err) return res.status(403).json("Access token invalid!");
 
     const storyID = req.params.id;
-    const chapterID = req.params.cid; 
+    const chapterID = req.params.cid;
     const { chapter_number, chapter_title, chapter_content } = req.body;
 
     const q = `UPDATE Chapters SET chapter_number = $1, chapter_title = $2, chapter_content = $3 
@@ -350,5 +353,38 @@ export const updateChapter = (req, res) => {
         }
       }
     );
+  });
+};
+
+export const getProfileStories = (req, res) => {
+  const token = req.cookies.access_token;
+  if (!token) return res.status(400).json("Not logged in!");
+
+  jwt.verify(token, "secret", (err, userInfo) => {
+    const q = `SELECT s.storyID as "id", s.story_cover as "coverImage", s.title as "title",
+      STRING_AGG(DISTINCT f.fandom_name, ', ') as "fandom", u.username as "author",
+      CASE WHEN s.is_finished THEN 'Completed' ELSE 'Ongoing' END as "status",
+      ARRAY_AGG(DISTINCT t.tag_name) as "tags", s.story_desc as "synopsis",
+      COUNT(DISTINCT c.chapterID) as "chapterCount", s.date_posted as "datePublished",
+      COALESCE(MAX(c.date_posted), s.date_posted) as "dateUpdated", 
+      SUM(LENGTH(REGEXP_REPLACE(c.chapter_content, '\s+', ' ', 'g')) - LENGTH(REPLACE(REGEXP_REPLACE(c.chapter_content, '\s+', ' ', 'g'), ' ', '')) + 1) as "wordCount"
+      FROM Stories s 
+      LEFT JOIN Users u ON s.authorID = u.userID
+      LEFT JOIN Chapters c ON s.storyID = c.storyID
+      LEFT JOIN Story_Fandoms sf ON s.storyID = sf.storyID
+      LEFT JOIN Fandoms f ON sf.fandomID = f.fandomID
+      LEFT JOIN Story_Tags st ON s.storyID = st.storyID
+      LEFT JOIN Tags t ON st.tagID = t.tagID
+      WHERE u.username = $1  -- replace $1 with the desired username
+      GROUP BY s.storyID, u.username
+      ORDER BY "dateUpdated" DESC;`;
+
+    db.query(q, [req.params.username], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: err.stack });
+      } else {
+        return res.status(200).json(result.rows);
+      }
+    });
   });
 };

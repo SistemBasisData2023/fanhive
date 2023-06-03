@@ -37,7 +37,7 @@ const Fic = () => {
   const getText = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent;
-  }
+  };
 
   return (
     <div className="fic-details">
@@ -116,9 +116,11 @@ const Fic = () => {
         <div className="chapter-content">
           <div className="title-edit">
             <h2>{selectedChapter.title}</h2>
-            <Link to={`/write/${data.id}/ch?edit=2`} state={selectedChapter}>
-              <SettingsRoundedIcon />
-            </Link>
+            {loggedUser.username === data.author && (
+              <Link to={`/write/${data.id}/ch?edit=2`} state={selectedChapter}>
+                <SettingsRoundedIcon />
+              </Link>
+            )}
           </div>
           <p>{selectedChapter.content}</p>
         </div>

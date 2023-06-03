@@ -9,12 +9,14 @@ import {
   getHeartedStories,
   addChapter,
   updateChapter,
+  getProfileStories,
 } from "../controllers/story.js";
 
 const router = express.Router();
 
 router.get("/", getStories);
 router.get("/:id", getStory);
+router.get("/profile/:username", getProfileStories);
 router.get("/followed/:id", getFollowedStories);
 router.get("/heart/:id", getHeartedStories);
 router.post("/", addStory);

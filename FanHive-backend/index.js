@@ -4,6 +4,7 @@ import authRoutes from "./routes/auth.js";
 import storyRoutes from "./routes/stories.js";
 import heartRoutes from "./routes/hearts.js";
 import commentRoutes from "./routes/comments.js";
+import followRoutes from "./routes/follows.js";
 import bp from "body-parser";
 import cors from "cors";
 import pg from "pg";
@@ -72,6 +73,7 @@ app.use("/auth", authRoutes);
 app.use("/fic", storyRoutes);
 app.use("/hearts", heartRoutes);
 app.use("/comments", commentRoutes);
+app.use("/follows", followRoutes);
 
 app.listen(8041, () => {
   console.log("Server running at port 8041");

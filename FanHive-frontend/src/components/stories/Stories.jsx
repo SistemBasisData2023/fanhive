@@ -4,9 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { Link } from "react-router-dom";
 
-const Stories = () => {
+const Stories = ({endpoint}) => {
   const { isLoading, error, data } = useQuery(["stories"], () =>
-    makeRequest.get("/fic/").then((res) => {
+    makeRequest.get(endpoint).then((res) => {
       return res.data;
     })
   );
@@ -69,6 +69,10 @@ const Stories = () => {
       ))}
     </div>
   );
+};
+
+Stories.defaultProps = {
+  endpoint: "/fic/",
 };
 
 export default Stories;
