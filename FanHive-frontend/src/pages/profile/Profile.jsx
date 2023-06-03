@@ -5,10 +5,12 @@ import Stories from "../../components/stories/Stories";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { useLocation } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/authenticationContext";
+import Update from "../../components/update/Update";
 
 const Profile = () => {
+  const [openUpdate, setOpenUpdate] = useState(false);
   const { loggedUser } = useContext(AuthContext);
   const userName = useLocation().pathname.split("/")[2];
   const queryClient = useQueryClient();
@@ -17,12 +19,13 @@ const Profile = () => {
     (following) => {
       if (following) return makeRequest.delete(`/follows/${userName}`);
       return makeRequest.post(`/follows/${userName}`);
-    }, {
+    },
+    {
       onSuccess: () => {
         queryClient.invalidateQueries("follows");
-      }
+      },
     }
-  )
+  );
 
   const { isLoading, error, data } = useQuery(["user"], () =>
     makeRequest.get(`/users/${userName}`).then((res) => {
@@ -78,7 +81,7 @@ const Profile = () => {
           {followLoading ? (
             "Loading"
           ) : data.userid === loggedUser.userid ? (
-            <button>Edit</button>
+            <button onClick={() => setOpenUpdate(true)}>Edit</button>
           ) : (
             <button onClick={handleFollow}>
               {followData.includes(loggedUser.userid) ? "Following" : "Follow"}
@@ -89,6 +92,7 @@ const Profile = () => {
       <div className="profileStories">
         <Stories endpoint={`/fic/profile/${data.username}`} />
       </div>
+      {openUpdate && <Update setOpenUpdate={setOpenUpdate} user={data}/>}
     </div>
   );
 };

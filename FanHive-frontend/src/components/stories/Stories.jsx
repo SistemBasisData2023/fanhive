@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { Link } from "react-router-dom";
 
-const Stories = ({endpoint}) => {
+const Stories = ({ endpoint }) => {
   const { isLoading, error, data } = useQuery(["stories"], () =>
     makeRequest.get(endpoint).then((res) => {
       return res.data;
@@ -19,7 +19,7 @@ const Stories = ({endpoint}) => {
   const getText = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent;
-  }
+  };
 
   return (
     <div className="stories">

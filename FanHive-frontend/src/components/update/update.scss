@@ -1,0 +1,103 @@
+@import "../../style.scss";
+
+.update {
+  @include themify($modes) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: themed("textColor");
+
+    .wrapper {
+      margin: auto;
+      width: 40%;
+      height: 70%;
+      padding: 50px;
+      background-color: themed("background");
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+      -webkit-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+      -moz-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+      position: relative;
+
+      h1 {
+        font-weight: bold;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .files {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 50px;
+        }
+
+        label {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          color: themed("textColor");
+          font-size: 15px;
+
+          .imgContainer {
+            position: relative;
+            img {
+              width: 100px;
+              height: 100px;
+              object-fit: cover;
+            }
+          }
+        }
+
+        input {
+          margin-top: 30px;
+          padding: 5px;
+          border: none;
+          border-bottom: 1px solid themed("border");
+        }
+
+        button {
+          border: 1px solid themed("textColor");
+          padding: 10px;
+          cursor: pointer;
+          color: themed("textColor");
+          background-color: transparent;
+          transition: all 0.1s ease;
+
+          &:hover {
+            background-color: themed("textColor");
+            color: themed("background");
+          }
+        }
+      }
+
+      .return {
+        position: absolute;
+        top: 35px;
+        right: 20px;
+        border: 1px solid themed("textColor");
+        background-color: transparent;
+        padding: 5px;
+        cursor: pointer;
+        color: themed("textColor");
+        transition: all 0.1s ease;
+
+        &:hover {
+          background-color: themed("textColor");
+          color: themed("background");
+        }
+      }
+    }
+  }
+}
