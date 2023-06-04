@@ -19,6 +19,9 @@ import FicWrite from "./pages/write/FicWrite";
 import ChapterWrite from "./pages/write/ChapterWrite";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import FollowHome from "./pages/followHome/FollowHome";
+import TagsFic from "./pages/tagsFic/TagsFic";
+import FandomFic from "./pages/fandomFic/FandomFic";
+import HeartedFic from "./pages/heartedFic/HeartedFic";
 
 function App() {
   const { loggedUser } = useContext(AuthContext);
@@ -83,6 +86,18 @@ function App() {
           path: "/followed/:id",
           element: <FollowHome />,
         },
+        {
+          path: "/tags/:name",
+          element: <TagsFic />,
+        },
+        {
+          path: "/fandom/:name",
+          element: <FandomFic />,
+        },
+        {
+          path: "/hearted/:id",
+          element: <HeartedFic />,
+        }
       ],
     },
     {

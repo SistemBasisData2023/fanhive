@@ -1,8 +1,10 @@
 import express from "express";
-import {} from "../controllers/heart.js";
+import { addHeart, deleteHeart, getHearts } from "../controllers/heart.js";
 
 const router = express.Router();
 
-router.get("",);
+router.get("/:sid", getHearts);
+router.post("/:sid", addHeart);
+router.delete("/:sid", deleteHeart);
 
 export default router;

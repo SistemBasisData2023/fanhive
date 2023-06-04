@@ -4,10 +4,8 @@ import NightlightRoundedIcon from "@mui/icons-material/NightlightRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import AppsRoundedIcon from "@mui/icons-material/AppsRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
-import Person4RoundedIcon from "@mui/icons-material/Person4Rounded";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authenticationContext";
@@ -15,6 +13,11 @@ import { AuthContext } from "../../context/authenticationContext";
 const Navbar = () => {
   const { toggle, darkMode } = useContext(DarkModeContext);
   const { loggedUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const navigateToHome = () => {
+    navigate("/");
+  };
 
   return (
     <div className="navbar">
@@ -22,7 +25,7 @@ const Navbar = () => {
         <Link to="/" style={{ textDecoration: "none" }}>
           <span>FanHive</span>
         </Link>
-        <HomeRoundedIcon />
+        <HomeRoundedIcon onClick={navigateToHome}/>
         {darkMode ? (
           <NightlightRoundedIcon onClick={toggle} />
         ) : (
@@ -41,13 +44,11 @@ const Navbar = () => {
             <span>Write</span>
           </div>
         </Link>
-        <Person4RoundedIcon />
-        <NotificationsRoundedIcon />
         <div className="user">
           <img src={`../uploads/${loggedUser.profile_pic}`} alt="profpic" />
           <Link
             to={`/profile/${loggedUser.username}`}
-            style={{ textDecoration: "none" }}
+            style={{ color: "inherit", textDecoration: "none" }}
           >
             <span>{loggedUser.username}</span>
           </Link>

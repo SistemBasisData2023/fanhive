@@ -15,11 +15,18 @@ const LeftBar = () => {
         <div className="menu">
           <div className="user">
             <img src={`../uploads/${loggedUser.profile_pic}`} alt="profpic" />
-            <span>{loggedUser.username}</span>
+            <Link
+              to={`/profile/${loggedUser.username}`}
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              <span>{loggedUser.username}</span>
+            </Link>
           </div>
           <div className="item">
             <img src={Hearts} alt="Heart Fics" />
-            <span>Heart</span>
+            <Link to={`/hearted/${loggedUser.userid}`}>
+              <span>Heart</span>
+            </Link>
           </div>
           <div className="item">
             <img src={Following} alt="Following" />
