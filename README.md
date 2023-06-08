@@ -2,6 +2,11 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/SistemBasisData2023/fanhive)
 
+<p align=center>
+<img src="./thumbnails/Logo%20FanHive.png" alt="FanHive Logo" height="250">
+<img src="./thumbnails/FanHive%20Banner.png" alt="FanHive Logo" height="250">
+</p>
+
 FanHive is an open-source website made for fanfiction readers. Users can write stories, write multiple chapters within a single story, follow other authors, interact with other authors, and express themselves thanks to the powerful rich-text editor.
 
 ## Table of Contents
@@ -75,16 +80,17 @@ Alternatively if you have Hadoop MapReduce installed on your machine, run the fo
 yarnpkg start
 ```
 
+It should run the website on `localhost:3000`, while the backend runs on `localhost:8041`.
+
 ## Members
 
-- [Satya Ananda Sulistio](github.com/styxnanda)
-- [Eldisja Hadasa](github.com/eldisja)
-- [Rain Elgratio Sion Hasian Lumban G](github.com/RainElgratio)
+- [Satya Ananda Sulistio](https://github.com/styxnanda)
+- [Eldisja Hadasa](https://github.com/eldisja)
+- [Rain Elgratio Sion Hasian Lumban G](https://github.com/RainElgratio)
 
 ## Progress Report
 
 - First Report (Click thumbnail below):
-<br>
 <div align="center">
 <a href="https://youtu.be/j4RG3DOQX9w">
   <img src="https://img.youtube.com/vi/j4RG3DOQX9w/maxresdefault.jpg" alt="Watch on YouTube" width=300/>
@@ -92,7 +98,6 @@ yarnpkg start
 </div>
 
 - Second Report (Not Available Yet):
-<br>
 <div align="center">
 <a href="">
   <img src="https://img.youtube.com/vi/x/maxresdefault.jpg" alt="Watch on YouTube" width=300/>
