@@ -1,4 +1,6 @@
+/misc
 /FanHive-frontend/node_modules
 /FanHive-frontend/public/uploads
+/FanHive-frontend/README.md
 /FanHive-backend/node_modules
 /FanHive-backend/.env

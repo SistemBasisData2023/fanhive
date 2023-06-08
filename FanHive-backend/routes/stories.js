@@ -12,6 +12,7 @@ import {
   getProfileStories,
   getTaggedStories,
   getFandomStories,
+  getSearchedStories,
 } from "../controllers/story.js";
 
 const router = express.Router();
@@ -23,6 +24,7 @@ router.get("/followed/:id", getFollowedStories);
 router.get("/heart/:id", getHeartedStories);
 router.get("/tags/:name", getTaggedStories);
 router.get("/fandom/:name", getFandomStories);
+router.get("/search/:title", getSearchedStories);
 router.post("/", addStory);
 router.delete("/:id", deleteStory);
 router.put("/:id", updateStory);

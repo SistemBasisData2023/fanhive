@@ -4,9 +4,10 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ChapterWrite = () => {
+  const navigate = useNavigate();
   const storyID = useLocation().pathname.split("/")[2];
   const state = useLocation().state;
   const { isLoading, error, data } = useQuery(["story"], () =>
@@ -37,6 +38,7 @@ const ChapterWrite = () => {
     } catch (err) {
       console.log(err);
     }
+    navigate(`/fic/${storyID}`);
   };
 
   if (isLoading) return <div>Loading...</div>;

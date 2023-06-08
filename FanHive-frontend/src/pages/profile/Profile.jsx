@@ -27,7 +27,7 @@ const Profile = () => {
     }
   );
 
-  const { isLoading, error, data } = useQuery(["user"], () =>
+  const { isLoading, error, data } = useQuery(["user", userName], () =>
     makeRequest.get(`/users/${userName}`).then((res) => {
       return res.data;
     })

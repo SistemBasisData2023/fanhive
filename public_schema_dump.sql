@@ -5,7 +5,7 @@
 -- Dumped from database version 15.2
 -- Dumped by pg_dump version 15.2
 
--- Started on 2023-06-08 18:00:00
+-- Started on 2023-06-08 18:02:07
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,6 +17,25 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- TOC entry 4 (class 2615 OID 2200)
+-- Name: public; Type: SCHEMA; Schema: -; Owner: pg_database_owner
+--
+
+CREATE SCHEMA public;
+
+
+ALTER SCHEMA public OWNER TO pg_database_owner;
+
+--
+-- TOC entry 2652 (class 0 OID 0)
+-- Dependencies: 4
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: pg_database_owner
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
 
 --
 -- TOC entry 241 (class 1255 OID 106496)
@@ -70,7 +89,7 @@ CREATE SEQUENCE public.chapters_chapterid_seq
 ALTER TABLE public.chapters_chapterid_seq OWNER TO satyaananda65;
 
 --
--- TOC entry 2652 (class 0 OID 0)
+-- TOC entry 2653 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: chapters_chapterid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: satyaananda65
 --
@@ -111,7 +130,7 @@ CREATE SEQUENCE public.comments_commentid_seq
 ALTER TABLE public.comments_commentid_seq OWNER TO satyaananda65;
 
 --
--- TOC entry 2653 (class 0 OID 0)
+-- TOC entry 2654 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: comments_commentid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: satyaananda65
 --
@@ -149,7 +168,7 @@ CREATE SEQUENCE public.fandoms_fandomid_seq
 ALTER TABLE public.fandoms_fandomid_seq OWNER TO satyaananda65;
 
 --
--- TOC entry 2654 (class 0 OID 0)
+-- TOC entry 2655 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: fandoms_fandomid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: satyaananda65
 --
@@ -218,7 +237,7 @@ CREATE SEQUENCE public.stories_storyid_seq
 ALTER TABLE public.stories_storyid_seq OWNER TO satyaananda65;
 
 --
--- TOC entry 2655 (class 0 OID 0)
+-- TOC entry 2656 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: stories_storyid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: satyaananda65
 --
@@ -282,7 +301,7 @@ CREATE SEQUENCE public.tags_tagid_seq
 ALTER TABLE public.tags_tagid_seq OWNER TO satyaananda65;
 
 --
--- TOC entry 2656 (class 0 OID 0)
+-- TOC entry 2657 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: tags_tagid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: satyaananda65
 --
@@ -325,7 +344,7 @@ CREATE SEQUENCE public.users_userid_seq
 ALTER TABLE public.users_userid_seq OWNER TO satyaananda65;
 
 --
--- TOC entry 2657 (class 0 OID 0)
+-- TOC entry 2658 (class 0 OID 0)
 -- Dependencies: 214
 -- Name: users_userid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: satyaananda65
 --
@@ -570,7 +589,7 @@ COPY public.users (userid, username, password, email, cover_pic, profile_pic, re
 
 
 --
--- TOC entry 2658 (class 0 OID 0)
+-- TOC entry 2659 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: chapters_chapterid_seq; Type: SEQUENCE SET; Schema: public; Owner: satyaananda65
 --
@@ -579,7 +598,7 @@ SELECT pg_catalog.setval('public.chapters_chapterid_seq', 11, true);
 
 
 --
--- TOC entry 2659 (class 0 OID 0)
+-- TOC entry 2660 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: comments_commentid_seq; Type: SEQUENCE SET; Schema: public; Owner: satyaananda65
 --
@@ -588,7 +607,7 @@ SELECT pg_catalog.setval('public.comments_commentid_seq', 7, true);
 
 
 --
--- TOC entry 2660 (class 0 OID 0)
+-- TOC entry 2661 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: fandoms_fandomid_seq; Type: SEQUENCE SET; Schema: public; Owner: satyaananda65
 --
@@ -597,7 +616,7 @@ SELECT pg_catalog.setval('public.fandoms_fandomid_seq', 29, true);
 
 
 --
--- TOC entry 2661 (class 0 OID 0)
+-- TOC entry 2662 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: stories_storyid_seq; Type: SEQUENCE SET; Schema: public; Owner: satyaananda65
 --
@@ -606,7 +625,7 @@ SELECT pg_catalog.setval('public.stories_storyid_seq', 17, true);
 
 
 --
--- TOC entry 2662 (class 0 OID 0)
+-- TOC entry 2663 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: tags_tagid_seq; Type: SEQUENCE SET; Schema: public; Owner: satyaananda65
 --
@@ -615,7 +634,7 @@ SELECT pg_catalog.setval('public.tags_tagid_seq', 70, true);
 
 
 --
--- TOC entry 2663 (class 0 OID 0)
+-- TOC entry 2664 (class 0 OID 0)
 -- Dependencies: 214
 -- Name: users_userid_seq; Type: SEQUENCE SET; Schema: public; Owner: satyaananda65
 --
@@ -866,7 +885,7 @@ ALTER TABLE ONLY public.story_tags
     ADD CONSTRAINT story_tags_tagid_fkey FOREIGN KEY (tagid) REFERENCES public.tags(tagid);
 
 
--- Completed on 2023-06-08 18:00:03
+-- Completed on 2023-06-08 18:02:10
 
 --
 -- PostgreSQL database dump complete

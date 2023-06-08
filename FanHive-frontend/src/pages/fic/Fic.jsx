@@ -38,6 +38,8 @@ const Fic = () => {
   useEffect(() => {
     if (data && data.chapters && data.chapters.length > 0) {
       setSelectedChapter(data.chapters[0]);
+    } else if(data.chapters.length === 0) {
+      setSelectedChapter(null);
     }
   }, [data]);
 
@@ -80,6 +82,8 @@ const Fic = () => {
     return doc.body.textContent;
   };
 
+  console.log(selectedChapter);
+
   return (
     <div className="fic-details">
       <div className="top-details">
@@ -98,7 +102,9 @@ const Fic = () => {
             ) : (
               <FavoriteBorderRoundedIcon onClick={handleHeart} />
             )}
-            <CommentRoundedIcon onClick={() => setCommentSection(!commentOpen)}/>
+            <CommentRoundedIcon
+              onClick={() => setCommentSection(!commentOpen)}
+            />
             {loggedUser.username === data.author && (
               <div className="edit">
                 <Link
@@ -112,14 +118,17 @@ const Fic = () => {
               </div>
             )}
           </div>
-          <p className="fic-fandom">
-            <Link
-              to={`/fandom/${encodeURIComponent(data.fandom)}`}
-              style={{ color: "inherit", textDecoration: "underline" }}
-            >
-              {data.fandom}
-            </Link>
-          </p>
+          {data.fandom.map((fandom) => (
+            <span className="fic-fandom" key={fandom}>
+              <Link
+                to={`/fandom/${encodeURIComponent(fandom)}`}
+                style={{ color: "inherit", textDecoration: "underline" }}
+              >
+                {fandom}
+              </Link>
+              {data.fandom.indexOf(fandom) !== data.fandom.length - 1 && ", "}
+            </span>
+          ))}
           <p className="fic-author">
             by{" "}
             <Link
@@ -158,7 +167,7 @@ const Fic = () => {
             <span>
               {data &&
                 data.wordCount !== undefined &&
-                data.wordCount.toLocaleString("en-US")}{" "}
+                Number(data.wordCount).toLocaleString("en-US")}{" "}
               Words
             </span>
           </div>
@@ -171,9 +180,6 @@ const Fic = () => {
             <button
               key={chapter.id}
               onClick={() => handleChapterSelect(chapter)}
-              //className={
-              //selectedChapter.id === chapter.number ? "selected" : ""
-              //}
             >
               Chapter {chapter.number}
             </button>
@@ -189,7 +195,11 @@ const Fic = () => {
           <div className="title-edit">
             <h2>{selectedChapter.title}</h2>
             {loggedUser.username === data.author && (
-              <Link to={`/write/${data.id}/ch?edit=2`} style={{color: "inherit"}} state={selectedChapter}>
+              <Link
+                to={`/write/${data.id}/ch?edit=2`}
+                style={{ color: "inherit" }}
+                state={selectedChapter}
+              >
                 <SettingsRoundedIcon />
               </Link>
             )}
@@ -201,7 +211,9 @@ const Fic = () => {
           ></p>
         </div>
       )}
-      {commentOpen && <Comments setCommentSection={setCommentSection} storyID={id} />}
+      {commentOpen && (
+        <Comments setCommentSection={setCommentSection} storyID={id} />
+      )}
     </div>
   );
 };

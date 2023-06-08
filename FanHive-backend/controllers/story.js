@@ -10,7 +10,7 @@ export const getStories = (req, res) => {
   });
 
   const q = `SELECT s.storyID as "id", s.story_cover as "coverImage", s.title as "title",
-    STRING_AGG(DISTINCT f.fandom_name, ', ') as "fandom", u.username as "author",
+    ARRAY_AGG(DISTINCT f.fandom_name) as "fandom", u.username as "author",
     CASE WHEN s.is_finished THEN 'Completed' ELSE 'Ongoing' END as "status",
     ARRAY_AGG(DISTINCT t.tag_name) as "tags", s.story_desc as "synopsis",
     COUNT(DISTINCT c.chapterID) as "chapterCount", s.date_posted as "datePublished",
@@ -100,10 +100,13 @@ export const getTaggedStories = (req, res) => {
       s.storyID as "id", 
       s.story_cover as "coverImage", 
       s.title as "title",
-      STRING_AGG(DISTINCT f.fandom_name, ', ') as "fandom", 
+      ARRAY_AGG(DISTINCT f.fandom_name) as "fandom", 
       u.username as "author",
       CASE WHEN s.is_finished THEN 'Completed' ELSE 'Ongoing' END as "status",
-      ARRAY_AGG(DISTINCT t.tag_name) as "tags", 
+      (SELECT ARRAY_AGG(DISTINCT t2.tag_name) 
+      FROM Story_Tags st2 
+      LEFT JOIN Tags t2 ON st2.tagID = t2.tagID
+      WHERE st2.storyID = s.storyID) as "tags", 
       s.story_desc as "synopsis",
       COUNT(DISTINCT c.chapterID) as "chapterCount", 
       s.date_posted as "datePublished",
@@ -116,7 +119,12 @@ export const getTaggedStories = (req, res) => {
       LEFT JOIN Fandoms f ON sf.fandomID = f.fandomID
       LEFT JOIN Story_Tags st ON s.storyID = st.storyID
       LEFT JOIN Tags t ON st.tagID = t.tagID
-      WHERE LOWER(t.tag_name) = LOWER($1)
+      WHERE s.storyID IN (
+        SELECT st3.storyID
+        FROM Story_Tags st3 
+        LEFT JOIN Tags t3 ON st3.tagID = t3.tagID
+        WHERE LOWER(t3.tag_name) = LOWER($1)
+      )
       GROUP BY s.storyID, u.username
       ORDER BY COALESCE(MAX(c.date_posted), s.date_posted) DESC;`;
 
@@ -138,7 +146,10 @@ export const getFandomStories = (req, res) => {
       s.storyID as "id", 
       s.story_cover as "coverImage", 
       s.title as "title",
-      STRING_AGG(DISTINCT f.fandom_name, ', ') as "fandom", 
+      (SELECT ARRAY_AGG(DISTINCT f2.fandom_name) 
+      FROM Story_Fandoms sf2 
+      LEFT JOIN Fandoms f2 ON sf2.fandomID = f2.fandomID
+      WHERE sf2.storyID = s.storyID) as "fandom",
       u.username as "author",
       CASE WHEN s.is_finished THEN 'Completed' ELSE 'Ongoing' END as "status",
       ARRAY_AGG(DISTINCT t.tag_name) as "tags", 
@@ -154,7 +165,12 @@ export const getFandomStories = (req, res) => {
       LEFT JOIN Fandoms f ON sf.fandomID = f.fandomID
       LEFT JOIN Story_Tags st ON s.storyID = st.storyID
       LEFT JOIN Tags t ON st.tagID = t.tagID
-      WHERE LOWER(f.fandom_name) = LOWER($1)
+      WHERE s.storyID IN (
+        SELECT sf3.storyID
+        FROM Story_Fandoms sf3 
+        LEFT JOIN Fandoms f3 ON sf3.fandomID = f3.fandomID
+        WHERE LOWER(f3.fandom_name) = LOWER($1)
+      )
       GROUP BY s.storyID, u.username
       ORDER BY COALESCE(MAX(c.date_posted), s.date_posted) DESC;`;
 
@@ -174,7 +190,7 @@ export const getFollowedStories = (req, res) => {
   });
 
   const q = `SELECT s.storyID as "id", s.story_cover as "coverImage", s.title as "title",
-    STRING_AGG(DISTINCT f.fandom_name, ', ') as "fandom", u.username as "author",
+    ARRAY_AGG(DISTINCT f.fandom_name) as "fandom", u.username as "author",
     CASE WHEN s.is_finished THEN 'Completed' ELSE 'Ongoing' END as "status",
     ARRAY_AGG(DISTINCT t.tag_name) as "tags", s.story_desc as "synopsis",
     COUNT(DISTINCT c.chapterID) as "chapterCount", s.date_posted as "datePublished",
@@ -209,7 +225,7 @@ export const getHeartedStories = (req, res) => {
     s.storyID as "id", 
     s.story_cover as "coverImage", 
     s.title as "title",
-    STRING_AGG(DISTINCT f.fandom_name, ', ') as "fandom", 
+    ARRAY_AGG(DISTINCT f.fandom_name) as "fandom", 
     u.username as "author",
     CASE WHEN s.is_finished THEN 'Completed' ELSE 'Ongoing' END as "status",
     ARRAY_AGG(DISTINCT t.tag_name) as "tags", 
@@ -233,6 +249,45 @@ export const getHeartedStories = (req, res) => {
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json({ message: err.message });
     return res.status(200).json(data.rows);
+  });
+};
+
+export const getSearchedStories = (req, res) => {
+  const token = req.cookies.access_token;
+  if (!token) return res.status(400).json("Not logged in!");
+
+  jwt.verify(token, "secret", (err, userInfo) => {
+    if (err) return res.status(403).json("Access token invalid!");
+
+    const searchedTitle = decodeURIComponent(req.params.title);
+    const q = `SELECT 
+      s.storyID as "id", 
+      s.story_cover as "coverImage", 
+      s.title as "title",
+      ARRAY_AGG(DISTINCT f.fandom_name) as "fandom", 
+      u.username as "author",
+      CASE WHEN s.is_finished THEN 'Completed' ELSE 'Ongoing' END as "status",
+      ARRAY_AGG(DISTINCT t.tag_name) as "tags", 
+      s.story_desc as "synopsis",
+      COUNT(DISTINCT c.chapterID) as "chapterCount", 
+      s.date_posted as "datePublished",
+      MAX(c.date_posted) as "dateUpdated", 
+      SUM(array_length(regexp_split_to_array(c.chapter_content, '\s'),1)) as "wordCount"
+      FROM Stories s 
+      LEFT JOIN Users u ON s.authorID = u.userID
+      LEFT JOIN Chapters c ON s.storyID = c.storyID
+      LEFT JOIN Story_Fandoms sf ON s.storyID = sf.storyID
+      LEFT JOIN Fandoms f ON sf.fandomID = f.fandomID
+      LEFT JOIN Story_Tags st ON s.storyID = st.storyID
+      LEFT JOIN Tags t ON st.tagID = t.tagID
+      WHERE to_tsvector('simple', s.title) @@ plainto_tsquery('simple', $1)
+      GROUP BY s.storyID, u.username
+      ORDER BY COALESCE(MAX(c.date_posted), s.date_posted) DESC;`;
+
+    db.query(q, [searchedTitle], (err, data) => {
+      if (err) return res.status(500).json({ message: err.message });
+      return res.status(200).json(data.rows);
+    });
   });
 };
 
@@ -268,7 +323,7 @@ export const addStory = (req, res) => {
 
           const insertTags = async () => {
             for (let tag of tagsList) {
-              const qTag = `INSERT INTO tags (tag_name) VALUES ($1) ON CONFLICT (tag_name) DO NOTHING RETURNING tagid;`;
+              const qTag = `INSERT INTO tags (tag_name) VALUES ($1) ON CONFLICT (tag_name) DO UPDATE SET tag_name=EXCLUDED.tag_name RETURNING tagid;`;
               let resultTag = await db.query(qTag, [tag.trim()]);
               const tagID = resultTag.rows[0].tagid;
 
@@ -279,7 +334,7 @@ export const addStory = (req, res) => {
 
           const insertFandoms = async () => {
             for (let fandom of fandomsList) {
-              const qFandom = `INSERT INTO fandoms (fandom_name) VALUES ($1) ON CONFLICT (fandom_name) DO NOTHING RETURNING fandomid;`;
+              const qFandom = `INSERT INTO fandoms (fandom_name) VALUES ($1) ON CONFLICT (fandom_name) DO UPDATE SET fandom_name=EXCLUDED.fandom_name RETURNING fandomid;`;
               let resultFandom = await db.query(qFandom, [fandom.trim()]);
               const fandomID = resultFandom.rows[0].fandomid;
 
@@ -456,7 +511,7 @@ export const getProfileStories = (req, res) => {
 
   jwt.verify(token, "secret", (err, userInfo) => {
     const q = `SELECT s.storyID as "id", s.story_cover as "coverImage", s.title as "title",
-      STRING_AGG(DISTINCT f.fandom_name, ', ') as "fandom", u.username as "author",
+      ARRAY_AGG(DISTINCT f.fandom_name) as "fandom", u.username as "author",
       CASE WHEN s.is_finished THEN 'Completed' ELSE 'Ongoing' END as "status",
       ARRAY_AGG(DISTINCT t.tag_name) as "tags", s.story_desc as "synopsis",
       COUNT(DISTINCT c.chapterID) as "chapterCount", s.date_posted as "datePublished",

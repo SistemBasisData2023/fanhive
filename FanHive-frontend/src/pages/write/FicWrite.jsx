@@ -3,14 +3,15 @@ import "./ficWrite.scss";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { makeRequest } from "../../axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const FicWrite = () => {
+  const navigate = useNavigate();
   const state = useLocation().state;
   const [value, setValue] = useState(state?.synopsis || "");
   const [title, setTitle] = useState(state?.title || "");
-  const [fandom, setFandom] = useState(state?.fandom.join(', ') || "");
-  const [tags, setTags] = useState(state?.tags.join(', ') || "");
+  const [fandom, setFandom] = useState(state?.fandom.join(", ") || "");
+  const [tags, setTags] = useState(state?.tags.join(", ") || "");
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState(state?.status || false);
 
@@ -33,7 +34,7 @@ const FicWrite = () => {
         ? await makeRequest.put(`/fic/${state.id}`, {
             title,
             story_desc: value,
-            is_finished: status,
+            is_finished: status === "Completed",
             fandom,
             tags,
             story_cover: file ? imageUrl : "",
@@ -41,7 +42,7 @@ const FicWrite = () => {
         : await makeRequest.post(`/fic/`, {
             title,
             story_desc: value,
-            is_finished: status,
+            is_finished: status === "Completed",
             fandom,
             tags,
             story_cover: file ? imageUrl : "",
@@ -49,6 +50,7 @@ const FicWrite = () => {
     } catch (err) {
       console.log(err);
     }
+    navigate("/");
   };
 
   return (
@@ -106,8 +108,8 @@ const FicWrite = () => {
               <input
                 type="checkbox"
                 name="stat"
-                checked={status}
-                onChange={(e) => setStatus(e.target.checked)}
+                checked={status === "Completed"}
+                onChange={(e) => setStatus(e.target.checked ? "Completed" : "Ongoing")}
               />
             </div>
             <label htmlFor="status">Finished</label>

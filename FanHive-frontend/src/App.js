@@ -22,6 +22,7 @@ import FollowHome from "./pages/followHome/FollowHome";
 import TagsFic from "./pages/tagsFic/TagsFic";
 import FandomFic from "./pages/fandomFic/FandomFic";
 import HeartedFic from "./pages/heartedFic/HeartedFic";
+import SearchedFic from "./pages/searchFic/SearchedFic";
 
 function App() {
   const { loggedUser } = useContext(AuthContext);
@@ -97,6 +98,10 @@ function App() {
         {
           path: "/hearted/:id",
           element: <HeartedFic />,
+        },
+        {
+          path: "/search/:title",
+          element: <SearchedFic />
         }
       ],
     },

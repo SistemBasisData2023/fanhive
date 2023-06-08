@@ -5,7 +5,7 @@ import { makeRequest } from "../../axios";
 import { Link } from "react-router-dom";
 
 const Stories = ({ endpoint }) => {
-  const { isLoading, error, data } = useQuery(["stories"], () =>
+  const { isLoading, error, data } = useQuery(["stories", endpoint], () =>
     makeRequest.get(endpoint).then((res) => {
       return res.data;
     })
@@ -21,6 +21,8 @@ const Stories = ({ endpoint }) => {
     return doc.body.textContent;
   };
 
+  console.log(data);
+
   return (
     <div className="stories">
       {data.map((story) => (
@@ -34,7 +36,12 @@ const Stories = ({ endpoint }) => {
             <Link to={`/fic/${story.id}`} style={{ textDecoration: "none" }}>
               <h2 className="story-title">{story.title}</h2>
             </Link>
-            <p className="story-fandom">{story.fandom}</p>
+            {story.fandom.map((fandom) => (
+              <span className="story-fandom" key={fandom}>
+                {fandom}
+                {story.fandom.indexOf(fandom) !== story.fandom.length - 1 && ", "}
+              </span>
+            ))}
             <p className="story-author">by {story.author}</p>
             <p className="story-status">{story.status}</p>
             {story.tags.length > 0 && (
@@ -59,7 +66,7 @@ const Stories = ({ endpoint }) => {
               </span>
               <span>
                 {story.wordCount
-                  ? story.wordCount.toLocaleString("en-US")
+                  ? Number(story.wordCount).toLocaleString("en-US")
                   : "0 "}{" "}
                 Words
               </span>
