@@ -1,6 +1,12 @@
 # FanHive
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/SistemBasisData2023/fanhive)
+![GitHub contributors](https://img.shields.io/github/contributors/SistemBasisData2023/fanhive)
+![GitHub last commit](https://img.shields.io/github/last-commit/SistemBasisData2023/fanhive)
+![GitHub repo size](https://img.shields.io/github/repo-size/SistemBasisData2023/fanhive)
+![GitHub top language](https://img.shields.io/github/languages/top/SistemBasisData2023/fanhive)
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/24269107-49534318-ec4e-4f9e-9c08-5f68d9954a2f?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D24269107-49534318-ec4e-4f9e-9c08-5f68d9954a2f%26entityType%3Dcollection%26workspaceId%3D6c8ef9b5-1bba-4036-b8fa-c0d5aacef761)
 
 <p align=center>
 <img src="./thumbnails/Logo%20FanHive.png" alt="FanHive Logo" height="250">
