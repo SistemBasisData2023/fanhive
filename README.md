@@ -103,10 +103,10 @@ It should run the website on `localhost:3000`, while the backend runs on `localh
 </a>
 </div>
 
-- Second Report (Not Available Yet):
+- Second Report (Click thumbnail below):
 <div align="center">
-<a href="">
-  <img src="https://img.youtube.com/vi/x/maxresdefault.jpg" alt="Watch on YouTube" width=300/>
+<a href="https://youtu.be/ywfgtsDVN2k">
+  <img src="https://img.youtube.com/vi/ywfgtsDVN2k/maxresdefault.jpg" alt="Watch on YouTube" width=300/>
 </a>
 </div>
 
