@@ -38,7 +38,7 @@ const Fic = () => {
   useEffect(() => {
     if (data && data.chapters && data.chapters.length > 0) {
       setSelectedChapter(data.chapters[0]);
-    } else if(data.chapters.length === 0) {
+    } else {
       setSelectedChapter(null);
     }
   }, [data]);
