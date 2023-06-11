@@ -18,9 +18,10 @@ FanHive is an open-source website made for fanfiction readers. Users can write s
 ## Table of Contents
 
 - [Installation](#installation)
+- [Usage](#usage)
+- [Quick Demonstration](#quick-demonstration)
 - [Frameworks](#frameworks)
 - [Features](#features)
-- [Usage](#usage)
 - [Team A1 Members](#members)
 - [Progress Report](#progress-report)
 - [Database UML](#database-uml)
@@ -42,6 +43,25 @@ If you're facing conflict with Hadoop MapReduce being installed on your machine,
 - Run `yarn` commands using `yarnpkg` instead, e.g. `yarnpkg install`
 - Move yarn package manager path to the top of your PATH environment variable (above Hadoop MapReduce yarn path)
 - Uninstall Hadoop MapReduce (**Not recommended**)
+
+## Usage
+
+To run the project, run the following commands:
+
+```bash
+yarn start
+```
+
+Alternatively if you have Hadoop MapReduce installed on your machine, run the following command:
+
+```bash
+yarnpkg start
+```
+
+It should run the website on `localhost:3000`, while the backend runs on `localhost:8041`.
+
+## Quick Demonstration
+
 
 ## Frameworks
 
@@ -71,22 +91,6 @@ If you're facing conflict with Hadoop MapReduce being installed on your machine,
 - [x] Show stories based on fandoms
 - [x] Create your own fandom(s)
 - [x] Create your own tag(s)
-
-## Usage
-
-To run the project, run the following commands:
-
-```bash
-yarn start
-```
-
-Alternatively if you have Hadoop MapReduce installed on your machine, run the following command:
-
-```bash
-yarnpkg start
-```
-
-It should run the website on `localhost:3000`, while the backend runs on `localhost:8041`.
 
 ## Members
 
