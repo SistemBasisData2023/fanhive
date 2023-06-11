@@ -62,6 +62,8 @@ It should run the website on `localhost:3000`, while the backend runs on `localh
 
 ## Quick Demonstration
 
+<img src="./thumbnails/GIF-demo.gif" alt="FanHive Demo" width="500">
+
 
 ## Frameworks
 
